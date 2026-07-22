@@ -1,5 +1,4 @@
 # Editor Raj Ultimate V3
-#Raj Mahawar Suratpura 
 
 ## GitHub repository me replace/upload karein
 - index.html
