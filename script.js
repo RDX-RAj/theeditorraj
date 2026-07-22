@@ -43,11 +43,69 @@ function themeIcon(){$('#themeBtn').innerHTML=body.classList.contains('light')?'
 themeIcon();
 $('#themeBtn').onclick=()=>{body.classList.toggle('light');localStorage.setItem('editor-raj-theme',body.classList.contains('light')?'light':'dark');themeIcon()};
 
-function syncAudio(){const n=audio.paused?'play':'pause';heroPlay.innerHTML=`<i class="fa-solid fa-${n}"></i>`;miniPlay.innerHTML=`<i class="fa-solid fa-${n}"></i>`;wave.classList.toggle('playing',!audio.paused)}
-async function toggleAudio(){try{audio.paused?await audio.play():audio.pause();syncAudio()}catch(e){showToast('music.mp3 upload nahi hai ya audio blocked hai')}}
-heroPlay.onclick=toggleAudio;miniPlay.onclick=toggleAudio;audio.onplay=syncAudio;audio.onpause=syncAudio;
-audio.ontimeupdate=()=>{if(audio.duration)progress.style.width=(audio.currentTime/audio.duration*100)+'%'};
+const tracks = [
+  {
+    title: "Midnight Edit Session",
+    artist: "EDITOR RAJ",
+    file: "music-1.mp3"
+  },
+  {
+    title: "Late Night Vibes",
+    artist: "EDITOR RAJ",
+    file: "music-2.mp3"
+  },
+  {
+    title: "Cinematic Mood",
+    artist: "EDITOR RAJ",
+    file: "music-3.mp3"
+  },
+  {
+    title: "Slowed Reverb Mix",
+    artist: "EDITOR RAJ",
+    file: "music-4.mp3"
+  }
+];
 
+let currentTrack = Math.floor(Math.random() * tracks.length);
+
+function loadTrack(index) {
+  const track = tracks[index];
+
+  audio.src = track.file;
+
+  const heroTitle = document.querySelector(".music-meta h3");
+  const heroArtist = document.querySelector(".music-meta p");
+  const miniTitle = document.querySelector(".mini-meta b");
+  const miniArtist = document.querySelector(".mini-meta span");
+
+  if (heroTitle) heroTitle.textContent = track.title;
+  if (heroArtist) heroArtist.textContent = track.artist;
+  if (miniTitle) miniTitle.textContent = track.title;
+  if (miniArtist) miniArtist.textContent = track.artist;
+
+  audio.load();
+}
+
+function playRandomTrack() {
+  let nextTrack;
+
+  do {
+    nextTrack = Math.floor(Math.random() * tracks.length);
+  } while (tracks.length > 1 && nextTrack === currentTrack);
+
+  currentTrack = nextTrack;
+  loadTrack(currentTrack);
+
+  audio.play()
+    .then(syncAudio)
+    .catch(() => {
+      showToast("Browser ne autoplay block kiya. Play button dabayein.");
+    });
+}
+
+audio.addEventListener("ended", playRandomTrack);
+
+loadTrack(currentTrack);
 $('#year').textContent=new Date().getFullYear();
 $('#topBtn').onclick=()=>scrollTo({top:0,behavior:'smooth'});
 $('#shareBtn').onclick=()=>shareUrl(location.href,document.title);
