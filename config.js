@@ -1,5 +1,3 @@
 window.EDITOR_RAJ_CONFIG = {
-  // Secure Cloudflare Worker URL yahan paste karein.
-  // Example: "https://editor-raj-youtube.yourname.workers.dev"
-  API_BASE: ""
+  API_BASE: "https://lucky-shadow-35e6.rajmahawarps.workers.dev"
 };
